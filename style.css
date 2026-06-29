@@ -142,6 +142,10 @@ td button.text-red-600:hover {
         min-height: 44px;
     }
 
+    #cashback-display {
+        width: 100%;
+    }
+
     #refresh-btn {
         justify-content: center;
     }

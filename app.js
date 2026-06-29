@@ -36,6 +36,8 @@ const loginBtn = document.getElementById('login-btn');
 const loginMessage = document.getElementById('login-message');
 const appRoot = document.getElementById('app-root');
 const loginStatus = document.getElementById('login-status');
+const cashbackDisplay = document.getElementById('cashback-display');
+const cashbackAmount = document.getElementById('cashback-amount');
 const logoutBtn = document.getElementById('logout-btn');
 
 // UI Elements
@@ -91,6 +93,9 @@ async function fetchBands() {
 async function fetchReservations() {
     if (!currentBand) {
         reservationsBody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-400">ログインしてください</td></tr>';
+        if (cashbackAmount) {
+            cashbackAmount.textContent = '¥0';
+        }
         return;
     }
 
@@ -122,6 +127,13 @@ async function fetchReservations() {
         if (error) throw error;
 
         reservationsBody.innerHTML = '';
+
+        const totalTickets = (data || []).reduce((sum, reservation) => sum + Number(reservation.ticket_count || 0), 0);
+        const cashbackValue = totalTickets >= 3 ? (totalTickets - 2) * 700 : 0;
+
+        if (cashbackAmount) {
+            cashbackAmount.textContent = `¥${cashbackValue.toLocaleString()}`;
+        }
         
         if (data.length === 0) {
             reservationsBody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-400">取り置きはまだありません</td></tr>';
@@ -374,6 +386,7 @@ window.addEventListener('DOMContentLoaded', () => {
         loginScreen.classList.add('hidden');
         appRoot.classList.remove('hidden');
         loginStatus.textContent = `${currentBand.band_name}`;
+        cashbackDisplay.classList.remove('hidden');
         exportBtn.classList.toggle('hidden', currentBand.band_name !== 'Borscht');
         logoutBtn.classList.remove('hidden');
         await fetchReservations();
@@ -382,6 +395,8 @@ window.addEventListener('DOMContentLoaded', () => {
     logoutBtn.addEventListener('click', () => {
         currentBand = null;
         loginStatus.textContent = '';
+        cashbackAmount.textContent = '¥0';
+        cashbackDisplay.classList.add('hidden');
         logoutBtn.classList.add('hidden');
         exportBtn.classList.add('hidden');
         guestNameInput.value = '';
