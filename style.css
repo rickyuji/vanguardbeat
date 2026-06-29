@@ -3,6 +3,14 @@
     text-shadow: 0 0 10px rgba(255, 214, 10, 0.5), 0 0 20px rgba(255, 214, 10, 0.3);
 }
 
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
 /* Smooth transition for the status message box */
 #status-message {
     transition: opacity 0.3s ease-in-out, transform 0.2s ease;
@@ -41,6 +49,10 @@
     background: #FFD60A; 
 }
 
+.custom-scrollbar {
+    -webkit-overflow-scrolling: touch;
+}
+
 /* Table row hover glow */
 tbody tr:hover td {
     background-color: #1a1a1a;
@@ -71,4 +83,63 @@ td button.text-red-600:hover {
     color: #ef4444 !important;
     border-color: rgba(239, 68, 68, 0.3);
     background-color: rgba(239, 68, 68, 0.1);
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 0.75rem;
+    }
+
+    #login-screen {
+        align-items: flex-start;
+        padding: max(1rem, env(safe-area-inset-top)) 0.75rem max(1rem, env(safe-area-inset-bottom));
+        overflow-y: auto;
+    }
+
+    #login-screen > div {
+        max-width: none;
+        width: 100%;
+        padding: 1.25rem;
+    }
+
+    #app-root {
+        gap: 1rem;
+    }
+
+    #app-root header {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    #app-root h1 {
+        font-size: 1.9rem;
+        line-height: 1.1;
+        letter-spacing: 0.08em;
+    }
+
+    #app-root header p {
+        letter-spacing: 0.18em;
+    }
+
+    #reservations-body td,
+    #reservations-body th {
+        padding: 0.75rem 0.65rem;
+        font-size: 0.875rem;
+    }
+
+    #reservations-body td span.bg-indigo-100 {
+        padding: 0.2rem 0.55rem !important;
+    }
+
+    #export-btn,
+    #refresh-btn,
+    #login-btn,
+    #logout-btn,
+    #submit-btn {
+        min-height: 44px;
+    }
+
+    #refresh-btn {
+        justify-content: center;
+    }
 }
