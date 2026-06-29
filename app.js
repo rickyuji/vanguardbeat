@@ -174,12 +174,12 @@ async function fetchReservations() {
 // Delete a reservation by id (only allowed for the logged band's reservations)
 async function deleteReservation(id) {
     if (!currentBand) return;
-    if (!confirm('この予約を削除しますか？')) return;
+    if (!confirm('この取り置きを削除しますか？')) return;
 
     try {
         const { error } = await supabaseClient.from('reservations').delete().eq('id', id);
         if (error) throw error;
-        showMessage('予約を削除しました。');
+        showMessage('取り置きを削除しました。');
         fetchReservations();
     } catch (err) {
         console.error('Error deleting reservation:', err);
@@ -225,7 +225,7 @@ form.addEventListener('submit', async (e) => {
         if (error) throw error;
 
         // Success
-        showMessage('予約を追加しました！');
+        showMessage('取り置きを追加しました！');
         guestNameInput.value = '';
         ticketCountInput.value = '1';
         
