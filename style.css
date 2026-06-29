@@ -1,4 +1,15 @@
 /* Core text glow utilities */
+html {
+    -webkit-text-size-adjust: 100%;
+    /* Add this to fix the Safari overscroll white background */
+    background-color: #0a0a0a; 
+}
+
+body {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    /* Add this as a fallback before Tailwind's CDN kicks in */
+    background-color: #0a0a0a; 
+}
 .drop-shadow-neon {
     text-shadow: 0 0 10px rgba(255, 214, 10, 0.5), 0 0 20px rgba(255, 214, 10, 0.3);
 }
