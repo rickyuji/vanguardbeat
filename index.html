@@ -78,7 +78,7 @@
             
             <div class="bg-[#161616] p-5 sm:p-6 rounded-xl border border-gray-800 shadow-2xl lg:col-span-1 h-fit relative group">
                 <div class="absolute inset-0 border border-[#FFD60A]/0 group-hover:border-[#FFD60A]/20 transition-colors rounded-xl pointer-events-none"></div>
-                <h2 class="text-xl font-display font-bold mb-6 border-b border-gray-800 pb-3 text-white tracking-wide">取り置き追加</h2>
+                <h2 class="text-lg font-display font-bold mb-6 border-b border-gray-800 pb-3 text-white tracking-wide">取り置き追加</h2>
                 
                 <form id="reservation-form" class="space-y-5">
                     <div>
@@ -87,7 +87,7 @@
                             type="text"
                             id="guest-name"
                             required
-                            placeholder="ナガオカ　ユウジ"
+                            placeholder="例）テン　モン"
                             pattern="^[ァ-ヶー]+　[ァ-ヶー]+$"
                             title="カタカナで、全角スペースを1つ入れて入力してください"
                             class="w-full bg-[#0a0a0a] border border-gray-800 rounded-md p-3 text-white focus:outline-none focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A] transition-all text-[16px]">
@@ -108,7 +108,7 @@
 
             <div class="bg-[#161616] p-0 rounded-xl border border-gray-800 shadow-2xl lg:col-span-2 overflow-hidden flex flex-col">
                 <div class="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center p-4 sm:p-6 border-b border-gray-800 bg-[#121212]">
-                    <h2 class="text-xl font-display font-bold text-white tracking-wide">取り置きリスト</h2>
+                    <h2 class="text-lg font-display font-bold text-white tracking-wide">取り置きリスト</h2>
                     <div class="flex items-center gap-3">
                         <button id="export-btn" class="hidden min-h-11 inline-flex items-center gap-2 rounded-md border border-[#FFD60A]/40 bg-[#FFD60A]/10 px-4 py-2 text-xs font-black uppercase tracking-widest text-[#FFD60A] transition-all hover:bg-[#FFD60A] hover:text-black hover:shadow-[0_0_18px_rgba(255,214,10,0.35)]">
                             エクセル
