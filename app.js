@@ -345,7 +345,7 @@ async function exportReservationsToExcel() {
         showMessage('エクスポートに失敗しました', true);
     } finally {
         exportBtn.disabled = false;
-        exportBtn.textContent = 'エクセルをエクスポート';
+        exportBtn.textContent = 'エクセル';
     }
 }
 
