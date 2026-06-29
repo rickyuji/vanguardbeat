@@ -1,15 +1,4 @@
 /* Core text glow utilities */
-html {
-    -webkit-text-size-adjust: 100%;
-    /* Add this to fix the Safari overscroll white background */
-    background-color: #0a0a0a; 
-}
-
-body {
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
-    /* Add this as a fallback before Tailwind's CDN kicks in */
-    background-color: #0a0a0a; 
-}
 .drop-shadow-neon {
     text-shadow: 0 0 10px rgba(255, 214, 10, 0.5), 0 0 20px rgba(255, 214, 10, 0.3);
 }
@@ -62,6 +51,7 @@ body {
 
 .custom-scrollbar {
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y; /* Forces Safari to allow vertical scrolling here */
 }
 
 /* Table row hover glow */
@@ -99,6 +89,8 @@ td button.text-red-600:hover {
 @media (max-width: 640px) {
     body {
         padding: 0.75rem;
+        /* Adds enough invisible space at the bottom so you can keep scrolling */
+        padding-bottom: 75vh; 
     }
 
     #login-screen {
@@ -152,5 +144,12 @@ td button.text-red-600:hover {
 
     #refresh-btn {
         justify-content: center;
+    }
+    .lg\:col-span-2 > div:first-child {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        /* Adds a nice shadow to separate it from the scrolling table */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); 
     }
 }
