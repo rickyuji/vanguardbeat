@@ -50,32 +50,21 @@ const submitBtn = document.getElementById('submit-btn');
 const refreshBtn = document.getElementById('refresh-btn');
 const exportBtn = document.getElementById('export-btn');
 
-// ==========================================
-// NEW NEON STATUS MESSAGE LOGIC
-// ==========================================
+// Helper to show status messages smoothly
 function showMessage(text, isError = false) {
-    // Reset base classes to ensure old color themes are removed
-    statusMessage.className = 'mt-4 p-3 rounded text-sm text-center font-bold tracking-wide';
-    
-    // Set text
     statusMessage.textContent = text;
+    statusMessage.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
     
-    // Apply neon styling based on status
     if (isError) {
-        statusMessage.classList.add('neon-error');
+        statusMessage.classList.add('bg-red-100', 'text-red-800');
     } else {
-        statusMessage.classList.add('neon-success');
+        statusMessage.classList.add('bg-green-100', 'text-green-800');
     }
     
-    // Trigger CSS fade-in animation
-    requestAnimationFrame(() => {
-        statusMessage.classList.add('show');
-    });
-    
-    // Fade out after 3.5 seconds
+    // Hide after 3 seconds
     setTimeout(() => {
-        statusMessage.classList.remove('show');
-    }, 3500);
+        statusMessage.classList.add('hidden');
+    }, 3000);
 }
 
 // ==========================================
@@ -206,7 +195,7 @@ form.addEventListener('submit', async (e) => {
     
     const guestName = guestNameInput.value.trim();
     const ticketCount = parseInt(ticketCountInput.value, 10);
-    const katakanaNamePattern = /^[ァ-ヶー]+ [ァ-ヶー]+$/;
+    const katakanaNamePattern = /^[ァ-ヶー]+　[ァ-ヶー]+$/;
 
     if (!currentBand || !guestName || !ticketCount) {
         showMessage('すべての項目を入力してください', true);

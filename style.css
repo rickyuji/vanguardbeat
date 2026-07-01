@@ -12,63 +12,8 @@ body {
 }
 
 /* Smooth transition for the status message box */
-/* =========================================
-   NEON STATUS & ALERT MESSAGES
-   ========================================= */
-
-/* Base styling for all messages */
-#status-message, 
-#login-message {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 4px;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    backdrop-filter: blur(4px);
-}
-
-/* Base state for status message (hidden) */
 #status-message {
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none; /* Prevents clicking when hidden */
-}
-
-/* Active state for status message (visible) */
-#status-message.show {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-
-/* 🟢 SUCCESS (Green Neon) */
-.neon-success {
-    background-color: rgba(34, 197, 94, 0.05) !important;
-    border: 1px solid rgba(34, 197, 94, 0.5) !important;
-    color: #4ade80 !important;
-    box-shadow: 0 0 15px rgba(34, 197, 94, 0.15), inset 0 0 10px rgba(34, 197, 94, 0.05);
-    text-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
-}
-
-/* 🔴 ERROR (Red Neon) - Used for both forms and login */
-.neon-error,
-#login-message:not(:empty) {
-    background-color: rgba(239, 68, 68, 0.05) !important;
-    border: 1px solid rgba(239, 68, 68, 0.5) !important;
-    color: #f87171 !important;
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.15), inset 0 0 10px rgba(239, 68, 68, 0.05);
-    text-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
-    padding: 0.75rem !important; /* Ensures the login message gets padding only when it has text */
-}
-
-/* 🟡 INFO/WARNING (Signature Yellow Neon) */
-.neon-info {
-    background-color: rgba(255, 214, 10, 0.05) !important;
-    border: 1px solid rgba(255, 214, 10, 0.5) !important;
-    color: #FFD60A !important;
-    box-shadow: 0 0 15px rgba(255, 214, 10, 0.15), inset 0 0 10px rgba(255, 214, 10, 0.05);
-    text-shadow: 0 0 8px rgba(255, 214, 10, 0.4);
+    transition: opacity 0.3s ease-in-out, transform 0.2s ease;
 }
 
 /* Overriding the JS-injected classes for dark mode visibility */
