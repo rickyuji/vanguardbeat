@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Vanguard Borscht Beat</title>
+    <title>Borscht Beat</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,12 +31,90 @@
 </head>
 <body class="bg-gradient-to-br from-[#0a0a0a] to-[#121212] text-[#f5f5f5] font-sans min-h-[100svh] p-4 md:p-8 selection:bg-[#FFD60A] selection:text-black">
 
-    <div id="login-screen" class="fixed inset-0 bg-[#0a0a0a]/90 backdrop-blur-md flex items-center justify-center z-50">
+    <main id="home-screen" class="poster-shell max-w-6xl mx-auto relative overflow-hidden">
+        <div class="poster-grid">
+            <section class="poster-hero">
+                <p class="poster-kicker">Borscht presents</p>
+
+                <h1 class="poster-title">
+                    Borscht Beat
+                </h1>
+
+                <p class="poster-copy">
+                    A high-contrast summer bill built like a flyer, with a stacked lineup and a single-room impact.
+                </p>
+
+                <div class="poster-date">
+                    <span class="poster-date-main">2026.08.31</span>
+                    <span class="poster-date-divider"></span>
+                    <span class="poster-date-venue">@SPADE BOX</span>
+                </div>
+
+                <div class="poster-details">
+                    <div>
+                        <span class="poster-label">OPEN</span>
+                        <strong>10:30</strong>
+                    </div>
+                    <div>
+                        <span class="poster-label">START</span>
+                        <strong>11:00</strong>
+                    </div>
+                    <div>
+                        <span class="poster-label">ADV</span>
+                        <strong>¥1400</strong>
+                    </div>
+                    <div>
+                        <span class="poster-label">DOOR</span>
+                        <strong>¥1900</strong>
+                    </div>
+                </div>
+
+                
+            </section>
+
+            <aside class="poster-lineup">
+                <div class="poster-panel-head">
+                    <p>Lineup</p>
+                    <span>6 acts</span>
+                </div>
+
+                <ul class="poster-band-list custom-scrollbar">
+                    <li><span class="band-name band-headliner">BORSCHT</span><span class="band-tag">headliner</span></li>
+                    <li><span class="band-name">Lily of the Valley</span><span class="band-tag">guest</span></li>
+                    <li><span class="band-name">La Plata Dolphin</span><span class="band-tag">guest</span></li>
+                    <li><span class="band-name">ØROKAMONO</span><span class="band-tag">guest</span></li>
+                    <li><span class="band-name">WALABE</span><span class="band-tag">guest</span></li>
+                    <li><span class="band-name band-more">and more...</span></li>
+                </ul>
+                
+            </aside>
+        </div>
+        <div class="poster-actions">
+                    <button id="open-login-btn" type="button" class="group poster-login-btn">
+                        <span>Band Login</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+
+        <footer class="poster-footer text-center">
+            <p>&copy; 2026 Borscht. All rights reserved.</p>
+        </footer>
+    </main>
+
+    <div id="login-screen" class="hidden fixed inset-0 bg-[#0a0a0a]/90 backdrop-blur-md flex items-center justify-center z-50 px-4" aria-hidden="true">
         <div class="w-full max-w-md bg-[#161616]/80 p-8 rounded-xl border border-[#FFD60A]/20 shadow-[0_0_40px_rgba(255,214,10,0.1)] relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-1 bg-[#FFD60A] shadow-[0_0_15px_#FFD60A]"></div>
-            
+
+            <button id="close-login-btn" type="button" class="absolute right-4 top-4 text-sm uppercase tracking-widest text-gray-400 hover:text-[#FFD60A] transition-colors">
+                Close
+            </button>
+
             <h2 class="text-3xl font-display font-black mb-6 text-center text-[#FFD60A] tracking-wider drop-shadow-neon">ACCESS</h2>
-            
+
             <div class="space-y-5">
                 <div>
                     <label for="login-band" class="block text-xs font-bold text-[#e3e3e6] uppercase tracking-widest mb-1">Band Name</label>

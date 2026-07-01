@@ -30,6 +30,9 @@ const PREDEFINED_PASSWORDS = {
 
 // Login-related elements
 const loginScreen = document.getElementById('login-screen');
+const homeScreen = document.getElementById('home-screen');
+const openLoginBtn = document.getElementById('open-login-btn');
+const closeLoginBtn = document.getElementById('close-login-btn');
 const loginBandInput = document.getElementById('login-band');
 const loginPasswordInput = document.getElementById('login-password');
 const loginBtn = document.getElementById('login-btn');
@@ -49,6 +52,34 @@ const reservationsBody = document.getElementById('reservations-body');
 const submitBtn = document.getElementById('submit-btn');
 const refreshBtn = document.getElementById('refresh-btn');
 const exportBtn = document.getElementById('export-btn');
+
+function openLoginScreen() {
+    if (!loginScreen) return;
+
+    loginScreen.classList.remove('hidden');
+    loginScreen.setAttribute('aria-hidden', 'false');
+    loginMessage.textContent = '';
+    loginBandInput?.focus();
+}
+
+function closeLoginScreen() {
+    if (!loginScreen) return;
+
+    loginScreen.classList.add('hidden');
+    loginScreen.setAttribute('aria-hidden', 'true');
+}
+
+function showHomeScreen() {
+    homeScreen?.classList.remove('hidden');
+    appRoot?.classList.add('hidden');
+    closeLoginScreen();
+}
+
+function showAppScreen() {
+    homeScreen?.classList.add('hidden');
+    appRoot?.classList.remove('hidden');
+    closeLoginScreen();
+}
 
 // Helper to show status messages smoothly
 function showMessage(text, isError = false) {
@@ -383,8 +414,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         // Success
         currentBand = band;
-        loginScreen.classList.add('hidden');
-        appRoot.classList.remove('hidden');
+        showAppScreen();
         loginStatus.textContent = `${currentBand.band_name}`;
         cashbackDisplay.classList.remove('hidden');
         exportBtn.classList.toggle('hidden', currentBand.band_name !== 'Borscht');
@@ -402,8 +432,18 @@ window.addEventListener('DOMContentLoaded', () => {
         guestNameInput.value = '';
         ticketCountInput.value = '1';
         reservationsBody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-400">ログインしてください</td></tr>';
-        appRoot.classList.add('hidden');
-        loginScreen.classList.remove('hidden');
+        showHomeScreen();
         loginPasswordInput.value = '';
     });
+
+    openLoginBtn?.addEventListener('click', openLoginScreen);
+    closeLoginBtn?.addEventListener('click', closeLoginScreen);
+
+    loginScreen?.addEventListener('click', (event) => {
+        if (event.target === loginScreen && !currentBand) {
+            closeLoginScreen();
+        }
+    });
+
+    closeLoginScreen();
 });
