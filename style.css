@@ -119,10 +119,6 @@ body {
 .lineup-row:last-child {
     border-bottom: none;
 }
-.lineup-row:hover {
-    background-color: rgba(255, 214, 10, 0.04);
-    padding-left: 0.6rem;
-}
 .lineup-index {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.75rem;
