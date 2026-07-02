@@ -13,30 +13,9 @@ const supabaseClient = (typeof window.supabase !== 'undefined' && typeof window.
 let bandsList = [];
 let currentBand = null; // { id, band_name }
 
-// Predefined passwords for bands. Update these values to match your bands.
-// Key: exact `band_name` as stored in the `bands` table. Value: password string.
-const PREDEFINED_PASSWORDS = {
-    'Borscht': 'borscht123',
-    'Nóah': 'noah456',
-    'The Hidden Cat': 'hidden789',
-    'やきそばvision': 'yakisoba2024',
-    '花緑青': 'hanaroku2024',
-    'ØROKAMONO': 'orokamono2024',
-    'WALABE': 'walabe2024',
-    'La Plata Dolphins': 'laplata2024',
-    'Lily of the valley': 'lilyvalley2024',
-    'applause': 'applause2024'
-};
+const SESSION_KEY = 'borscht-current-band';
+const HOME_PAGE_URL = 'index.html';
 
-// Login-related elements
-const loginScreen = document.getElementById('login-screen');
-const homeScreen = document.getElementById('home-screen');
-const openLoginBtn = document.getElementById('open-login-btn');
-const closeLoginBtn = document.getElementById('close-login-btn');
-const loginBandInput = document.getElementById('login-band');
-const loginPasswordInput = document.getElementById('login-password');
-const loginBtn = document.getElementById('login-btn');
-const loginMessage = document.getElementById('login-message');
 const appRoot = document.getElementById('app-root');
 const loginStatus = document.getElementById('login-status');
 const cashbackDisplay = document.getElementById('cashback-display');
@@ -53,32 +32,33 @@ const submitBtn = document.getElementById('submit-btn');
 const refreshBtn = document.getElementById('refresh-btn');
 const exportBtn = document.getElementById('export-btn');
 
-function openLoginScreen() {
-    if (!loginScreen) return;
+function loadCurrentBandFromSession() {
+    try {
+        const storedBand = sessionStorage.getItem(SESSION_KEY);
+        if (!storedBand) {
+            return null;
+        }
 
-    loginScreen.classList.remove('hidden');
-    loginScreen.setAttribute('aria-hidden', 'false');
-    loginMessage.textContent = '';
-    loginBandInput?.focus();
+        const parsedBand = JSON.parse(storedBand);
+        if (!parsedBand?.band_name) {
+            return null;
+        }
+
+        return parsedBand;
+    } catch (err) {
+        console.error('Error loading band session:', err);
+        return null;
+    }
 }
 
-function closeLoginScreen() {
-    if (!loginScreen) return;
+function requireBandSession() {
+    const storedBand = loadCurrentBandFromSession();
+    if (!storedBand) {
+        window.location.href = HOME_PAGE_URL;
+        return null;
+    }
 
-    loginScreen.classList.add('hidden');
-    loginScreen.setAttribute('aria-hidden', 'true');
-}
-
-function showHomeScreen() {
-    homeScreen?.classList.remove('hidden');
-    appRoot?.classList.add('hidden');
-    closeLoginScreen();
-}
-
-function showAppScreen() {
-    homeScreen?.classList.add('hidden');
-    appRoot?.classList.remove('hidden');
-    closeLoginScreen();
+    return storedBand;
 }
 
 // Helper to show status messages smoothly
@@ -385,41 +365,27 @@ refreshBtn.addEventListener('click', fetchReservations);
 exportBtn.addEventListener('click', exportReservationsToExcel);
 
 window.addEventListener('DOMContentLoaded', () => {
-    // fetch bands first so login can validate band names
-    fetchBands().then(() => fetchReservations());
+    const storedBand = requireBandSession();
+    if (!storedBand) {
+        return;
+    }
 
-    // Login handlers
-    loginBtn.addEventListener('click', async () => {
-        const bandName = (loginBandInput.value || '').trim();
-        const password = (loginPasswordInput.value || '').trim();
-        loginMessage.textContent = '';
+    // fetch bands first so any band-related reads stay consistent
+    fetchBands().then(() => {
+        currentBand = bandsList.find((band) => band.band_name === storedBand.band_name) || null;
 
-        if (!bandName || !password) {
-            loginMessage.textContent = '両方の項目を入力してください';
+        if (!currentBand) {
+            sessionStorage.removeItem(SESSION_KEY);
+            window.location.href = HOME_PAGE_URL;
             return;
         }
 
-        // Find band by exact name (case-sensitive). You can adjust this behavior.
-        const band = bandsList.find(b => b.band_name === bandName);
-        if (!band) {
-            loginMessage.textContent = 'バンドが見つかりません';
-            return;
-        }
-
-        const expected = PREDEFINED_PASSWORDS[band.band_name];
-        if (!expected || expected !== password) {
-            loginMessage.textContent = 'パスワードが正しくありません';
-            return;
-        }
-
-        // Success
-        currentBand = band;
-        showAppScreen();
+        appRoot.classList.remove('hidden');
         loginStatus.textContent = `${currentBand.band_name}`;
         cashbackDisplay.classList.remove('hidden');
         exportBtn.classList.toggle('hidden', currentBand.band_name !== 'Borscht');
         logoutBtn.classList.remove('hidden');
-        await fetchReservations();
+        fetchReservations();
     });
 
     logoutBtn.addEventListener('click', () => {
@@ -432,18 +398,8 @@ window.addEventListener('DOMContentLoaded', () => {
         guestNameInput.value = '';
         ticketCountInput.value = '1';
         reservationsBody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-400">ログインしてください</td></tr>';
-        showHomeScreen();
-        loginPasswordInput.value = '';
+        appRoot.classList.add('hidden');
+        sessionStorage.removeItem(SESSION_KEY);
+        window.location.href = HOME_PAGE_URL;
     });
-
-    openLoginBtn?.addEventListener('click', openLoginScreen);
-    closeLoginBtn?.addEventListener('click', closeLoginScreen);
-
-    loginScreen?.addEventListener('click', (event) => {
-        if (event.target === loginScreen && !currentBand) {
-            closeLoginScreen();
-        }
-    });
-
-    closeLoginScreen();
 });

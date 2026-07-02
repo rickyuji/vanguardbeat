@@ -4,17 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Borscht Beat</title>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    
-    <link rel="stylesheet" href="style.css">
-    <script src="app.js" defer></script>
 
     <script>
         tailwind.config = {
@@ -28,64 +23,89 @@
             }
         }
     </script>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="home.js" defer></script>
 </head>
 <body class="bg-gradient-to-br from-[#0a0a0a] to-[#121212] text-[#f5f5f5] font-sans min-h-[100svh] p-4 md:p-8 selection:bg-[#FFD60A] selection:text-black">
+    <div id="login-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 px-4 backdrop-blur-md">
+        <div class="w-full max-w-md overflow-hidden rounded-2xl border border-[#FFD60A]/20 bg-[#161616]/95 shadow-[0_0_40px_rgba(255,214,10,0.12)]">
+            <div class="h-1 w-full bg-[#FFD60A] shadow-[0_0_15px_#FFD60A]"></div>
+            <div class="p-6 sm:p-8">
+                <div class="mb-6 text-center">
+                    <h2 class="text-3xl font-display font-black uppercase tracking-wider text-[#FFD60A] drop-shadow-neon">ACCESS</h2>
+                    <p class="mt-2 text-xs uppercase tracking-[0.3em] text-[#A1A1AA]">Band login</p>
+                </div>
 
-    <main id="home-screen" class="max-w-5xl mx-auto space-y-12 relative overflow-hidden">
-        <div class="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(255,214,10,0.16),transparent_60%)] pointer-events-none"></div>
+                <div class="space-y-5">
+                    <div>
+                        <label for="login-band" class="mb-1 block text-xs font-bold uppercase tracking-widest text-[#e3e3e6]">Band Name</label>
+                        <input id="login-band" autocomplete="username" class="w-full rounded-md border border-gray-800 bg-[#0a0a0a] p-3 text-[16px] text-white shadow-inner transition-all focus:border-[#FFD60A] focus:outline-none focus:ring-1 focus:ring-[#FFD60A]" placeholder="バンド名">
+                    </div>
 
-        <header class="text-center py-6 relative">
-            <p class="text-[#A1A1AA] tracking-[0.3em] text-lg pb-2 uppercase">
-                Borscht presents
-            </p>
-            <h1 class="text-5xl md:text-7xl font-display font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FFD60A] to-yellow-600 drop-shadow-neon uppercase">
-                Borscht Beat
-            </h1>
-            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-gradient-to-r from-transparent via-[#FFD60A] to-transparent"></div>
+                    <div>
+                        <label for="login-password" class="mb-1 block text-xs font-bold uppercase tracking-widest text-[#e3e3e6]">Password</label>
+                        <input id="login-password" type="password" autocomplete="current-password" class="w-full rounded-md border border-gray-800 bg-[#0a0a0a] p-3 text-[16px] text-white shadow-inner transition-all focus:border-[#FFD60A] focus:outline-none focus:ring-1 focus:ring-[#FFD60A]" placeholder="••••••••">
+                    </div>
+
+                    <button id="login-submit" class="w-full rounded-md bg-[#FFD60A] px-4 py-3 font-black uppercase tracking-widest text-black transition-all duration-300 hover:bg-yellow-400 hover:shadow-[0_0_20px_rgba(255,214,10,0.4)]">Enter System</button>
+                    <div id="login-message" class="text-center text-sm font-medium text-red-500" aria-live="polite"></div>
+                    <button id="login-close" class="w-full rounded-md border border-gray-800 px-4 py-3 text-xs font-bold uppercase tracking-widest text-gray-400 transition-colors hover:border-gray-700 hover:text-white">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main id="app-root" class="mx-auto max-w-5xl space-y-12">
+        <header class="relative py-6 text-center">
+            <p class="pb-2 text-base uppercase tracking-[0.3em] text-[#A1A1AA]">Borscht presents</p>
+            <h1 class="text-5xl font-display font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FFD60A] to-yellow-600 drop-shadow-neon md:text-6xl">Borscht Beat</h1>
+            <div class="absolute bottom-0 left-1/2 h-[1px] w-48 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFD60A] to-transparent"></div>
         </header>
 
-        <section class="flex justify-center w-full">
-            <div class="relative flex flex-col items-center justify-center text-center w-full max-w-lg p-6 bg-[#161616]/80 rounded-2xl border border-[#FFD60A]/20 shadow-[0_0_40px_rgba(255,214,10,0.08)] backdrop-blur-sm">
-                <div class="absolute inset-0 border border-[#FFD60A]/10 rounded-2xl pointer-events-none"></div>
+        <div class="flex w-full justify-center">
+    <div class="relative flex w-full max-w-sm flex-col items-center justify-center p-6 text-center">
 
-                <h2 class="text-3xl font-display font-bold mb-4 border-b border-[#FFD60A]/30 pb-3 text-white tracking-wide w-full text-center">
-                    Bands
-                </h2>
+        <div class="pointer-events-none absolute inset-0 rounded-xl border border-[#FFD60A]/30"></div>
 
-                <ul class="space-y-5 custom-scrollbar max-h-[500px] overflow-y-auto w-full">
-                    <li><span class="font-medium text-2xl tracking-wide">BORSCHT</span></li>
-                    <li><span class="font-medium text-2xl tracking-wide">Lily of the Valley</span></li>
-                    <li><span class="font-medium text-2xl tracking-wide">La Plata Dolphin</span></li>
-                    <li><span class="font-medium text-2xl tracking-wide">ØROKAMONO</span></li>
-                    <li><span class="font-medium text-2xl tracking-wide">WALABE</span></li>
-                    <li><span class="font-medium text-xl tracking-wide">and more...</span></li>
-                </ul>
-            </div>
-        </section>
+            <h2 class="mb-4 w-full border-b border-[#FFD60A]/30 pb-3 text-center text-2xl font-display font-bold tracking-wide text-white">Bands</h2>
 
-        <section class="relative p-6 flex flex-col items-center bg-[#161616]/65 rounded-2xl border border-[#FFD60A]/15 shadow-[0_0_30px_rgba(255,214,10,0.08)] backdrop-blur-sm">
-            <h2 class="text-3xl font-display font-bold text-[#FFD60A] mb-4 tracking-wider uppercase text-center">2026.08.31 @SPADE BOX</h2>
+            <ul class="custom-scrollbar max-h-[500px] w-full space-y-5 overflow-y-auto">
+                <li><span class="text-base font-medium tracking-wide">BORSCHT</span></li>
+                <li><span class="text-base font-medium tracking-wide">Lily of the Valley</span></li>
+                <li><span class="text-base font-medium tracking-wide">La Plata Dolphin</span></li>
+                <li><span class="text-base font-medium tracking-wide">ØROKAMONO</span></li>
+                <li><span class="text-base font-medium tracking-wide">WALABE</span></li>
+                <li><span class="text-base font-medium tracking-wide">and more...</span></li>
+            </ul>
+
+        </div>
+    </div>
+
+        <div class="relative flex flex-col items-center">
+            <h2 class="mb-4text-center text-2xl font-display font-bold uppercase tracking-wider text-[#FFD60A]">2026.08.31 @SPADE BOX</h2>
 
             <div class="w-full max-w-sm space-y-2">
-                <h3 class="grid grid-cols-[1fr_auto_1fr] gap-x-3 text-xl font-display font-bold text-[#A1A1AA] tracking-wider uppercase">
+                <h3 class="grid grid-cols-[1fr_auto_1fr] gap-x-3 text-lg font-display font-bold uppercase tracking-wider text-[#A1A1AA]">
                     <span class="text-right">OPEN 10:30</span>
                     <span class="text-[#FFD60A]">|</span>
                     <span class="text-left">START 11:00</span>
                 </h3>
 
-                <h3 class="grid grid-cols-[1fr_auto_1fr] gap-x-3 text-xl font-display font-bold text-[#A1A1AA] tracking-wider uppercase">
+                <h3 class="grid grid-cols-[1fr_auto_1fr] gap-x-3 text-lg font-display font-bold uppercase tracking-wider text-[#A1A1AA]">
                     <span class="text-right">ADV: ¥1400</span>
                     <span class="text-[#FFD60A]">|</span>
                     <span class="text-left">DOOR: ¥1900</span>
                 </h3>
             </div>
-        </section>
+        </div>
 
-        <div class="w-32 h-[1px] mx-auto bg-gradient-to-r from-transparent via-[#FFD60A] to-transparent"></div>
+        <div class="absolute bottom-0 left-1/2 h-[1px] w-48 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFD60A] to-transparent"></div>
 
-        <div class="flex justify-center mb-4 relative z-10">
-            <button id="open-login-btn" type="button" class="group relative inline-flex items-center gap-3 bg-[#FFD60A] text-black font-display font-black uppercase tracking-[0.2em] py-4 px-10 rounded-md hover:bg-yellow-400 hover:shadow-[0_0_25px_rgba(255,214,10,0.6)] transition-all duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform">
+
+        <div class="flex justify-center pb-4">
+            <button id="open-login" type="button" class="group inline-flex items-center gap-3 rounded-md bg-[#FFD60A] px-10 py-4 font-display font-black uppercase tracking-[0.2em] text-black transition-all duration-300 hover:bg-yellow-400 hover:shadow-[0_0_25px_rgba(255,214,10,0.6)]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
                     <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
                     <polyline points="10 17 15 12 10 7"></polyline>
                     <line x1="15" y1="12" x2="3" y2="12"></line>
@@ -93,143 +113,6 @@
                 Band Login
             </button>
         </div>
-
-        <footer class="text-center py-6 relative mt-6">
-            <p class="text-gray-500 text-base tracking-widest uppercase">
-                &copy; 2026 Borscht. All rights reserved.
-            </p>
-        </footer>
     </main>
-
-    <div id="login-screen" class="hidden fixed inset-0 bg-[#0a0a0a]/90 backdrop-blur-md flex items-center justify-center z-50 px-4" aria-hidden="true">
-        <div class="w-full max-w-md bg-[#161616]/80 p-8 rounded-xl border border-[#FFD60A]/20 shadow-[0_0_40px_rgba(255,214,10,0.1)] relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-[#FFD60A] shadow-[0_0_15px_#FFD60A]"></div>
-
-            <button id="close-login-btn" type="button" class="absolute right-4 top-4 text-sm uppercase tracking-widest text-gray-400 hover:text-[#FFD60A] transition-colors">
-                Close
-            </button>
-
-            <h2 class="text-3xl font-display font-black mb-6 text-center text-[#FFD60A] tracking-wider drop-shadow-neon">ACCESS</h2>
-
-            <div class="space-y-5">
-                <div>
-                    <label for="login-band" class="block text-xs font-bold text-[#e3e3e6] uppercase tracking-widest mb-1">Band Name</label>
-                    <input id="login-band" autocomplete="username" class="w-full bg-[#0a0a0a] border border-gray-800 rounded-md p-3 text-white focus:outline-none focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A] transition-all shadow-inner text-[16px]" placeholder="バンド名">
-                </div>
-                <div>
-                    <label for="login-password" class="block text-xs font-bold text-[#e3e3e6] uppercase tracking-widest mb-1">Password</label>
-                    <input id="login-password" type="password" autocomplete="current-password" class="w-full bg-[#0a0a0a] border border-gray-800 rounded-md p-3 text-white focus:outline-none focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A] transition-all shadow-inner text-[16px]" placeholder="••••••••">
-                </div>
-                <div class="pt-2">
-                    <button id="login-btn" class="w-full bg-[#FFD60A] text-black font-black uppercase tracking-widest py-3 px-4 rounded-md hover:bg-yellow-400 hover:shadow-[0_0_20px_rgba(255,214,10,0.4)] transition-all duration-300">Enter System</button>
-                </div>
-                <div id="login-message" class="text-sm text-red-500 font-medium text-center" aria-live="polite"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="app-root" class="max-w-5xl mx-auto space-y-8 hidden">
-        
-        <header class="text-center py-6 relative">
-            <h1 class="text-4xl md:text-5xl font-display font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FFD60A] to-yellow-600 drop-shadow-neon uppercase">Vanguard Borscht Beat</h1>
-            <p class="text-[#A1A1AA] tracking-[0.3em] text-xs mt-2 uppercase">Tonight We honor the hero</p>
-            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-[1px] bg-gradient-to-r from-transparent via-[#FFD60A] to-transparent"></div>
-        </header>
-
-        <div class="relative flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center bg-[#161616] px-4 py-3 sm:px-6 rounded-lg border border-gray-800 shadow-md min-h-[54px]">
-    
-        <div id="login-status" class="text-2xl font-medium tracking-wide text-[#FFD60A] text-center sm:text-left z-10"></div>
-            
-    <div id="cashback-display" class="hidden w-fit mx-auto flex items-center justify-center sm:absolute sm:left-1/2 sm:-translate-x-1/2 sm:top-1/2 sm:-translate-y-1/2 z-10 rounded-md border border-[#22c55e]/20 bg-black/30 px-3 py-1.5 text-center text-lg font-semibold text-[#22c55e] drop-shadow-[0_0_6px_rgba(34,197,94,0.65)]">
-        Cashback: <span id="cashback-amount" class="ml-1">¥0</span>
-    </div>
-    
-    <button id="logout-btn" class="text-sm uppercase tracking-widest text-gray-500 hover:text-red-500 transition-colors hidden font-bold z-10">Logout</button>
-    
-</div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <div class="bg-[#161616] p-5 sm:p-6 rounded-xl border border-gray-800 shadow-2xl lg:col-span-1 h-fit relative group">
-                <div class="absolute inset-0 border border-[#FFD60A]/0 group-hover:border-[#FFD60A]/20 transition-colors rounded-xl pointer-events-none"></div>
-                <h2 class="text-lg font-display font-bold mb-6 border-b border-gray-800 pb-3 text-white tracking-wide">取り置き追加</h2>
-                
-                <form id="reservation-form" class="space-y-5">
-                    <div>
-                        <label for="guest-name" class="block text-xs font-bold text-[#A1A1AA] uppercase tracking-widest mb-1">取り置きのお名前</label>
-                        <input
-                            type="text"
-                            id="guest-name"
-                            required
-                            placeholder="例）テン　モン"
-                            pattern="^[ァ-ヶー]+　[ァ-ヶー]+$"
-                            title="カタカナで、全角スペースを1つ入れて入力してください"
-                            class="w-full bg-[#0a0a0a] border border-gray-800 rounded-md p-3 text-white focus:outline-none focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A] transition-all text-[16px]">
-                    </div>
-
-                    <div>
-                        <label for="ticket-count" class="block text-xs font-bold text-[#A1A1AA] uppercase tracking-widest mb-1">枚数</label>
-                        <input type="number" id="ticket-count" required min="1" value="1" class="w-full bg-[#0a0a0a] border border-gray-800 rounded-md p-3 text-white focus:outline-none focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A] transition-all text-[16px]">
-                    </div>
-
-                    <button type="submit" id="submit-btn" class="w-full bg-[#FFD60A] text-black font-black uppercase tracking-widest py-3 px-4 rounded-md hover:bg-yellow-400 hover:shadow-[0_0_20px_rgba(255,214,10,0.3)] transition-all duration-300 mt-4">
-                        追加
-                    </button>
-
-                    <div id="status-message" class="hidden mt-4 p-3 rounded border text-sm text-center font-bold tracking-wide"></div>
-                </form>
-            </div>
-
-            <div class="bg-[#161616] p-0 rounded-xl border border-gray-800 shadow-2xl lg:col-span-2 overflow-hidden flex flex-col">
-                <div class="flex items-center justify-between p-4 sm:p-6 border-b border-gray-800 bg-[#121212]/90 backdrop-blur-md">    
-                    <h2 class="text-lg sm:text-2xl font-display font-bold text-white tracking-wide">取り置きリスト</h2>
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <button id="export-btn" class="hidden min-h-[40px] inline-flex items-center gap-2 rounded-md border border-[#FFD60A]/40 bg-[#FFD60A]/10 px-3 py-1.5 text-xs font-black uppercase tracking-widest text-[#FFD60A] transition-all hover:bg-[#FFD60A] hover:text-black hover:shadow-[0_0_18px_rgba(255,214,10,0.35)]">
-                            エクセル
-                        </button>
-                        
-                        <button id="refresh-btn" aria-label="取り置き一覧を更新" class="min-h-[40px] min-w-[40px] rounded-md border border-gray-800 bg-[#1a1a1a] flex items-center justify-center text-[#A1A1AA] hover:text-[#FFD60A] hover:border-[#FFD60A]/40 hover:bg-[#FFD60A]/10 hover:shadow-[0_0_10px_rgba(255,214,10,0.2)] transition-all">
-                            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                                <path d="M3 3v5h5"/>
-                                <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
-                                <path d="M16 21v-5h5"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto custom-scrollbar flex-1 p-2">
-                    <table class="min-w-full text-left border-collapse">
-                        <thead>
-                            <tr class="text-[#A1A1AA] text-xs uppercase tracking-widest border-b border-gray-800/50">
-                                <th class="p-4 font-semibold">お名前</th>
-                                <th class="p-4 font-semibold text-center">枚数</th>
-                                <th class="p-4 font-semibold text-right">アクセス</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reservations-body">
-                            <tr>
-                                <td colspan="3" class="p-8 text-center text-gray-600 font-medium tracking-wide">データがありません</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <footer class="text-center py-8 relative mt-8">
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-gradient-to-r from-transparent via-[#FFD60A] to-transparent"></div>
-            <a href="https://maps.app.goo.gl/NVhFEDvC7bw6SrYU8" target="_blank" rel="noopener noreferrer" class="inline-block">
-                <h2 class="text-xl md:text-3xl font-display font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FFD60A] to-yellow-600 drop-shadow-neon uppercase mt-4">
-                    8/31 @Spade Box
-                </h2>
-            </a>
-            
-            <p class="text-[#A1A1AA] tracking-[0.3em] text-xs mt-2 uppercase">
-                See you in my dream
-            </p>
-        </footer>
-
-    </div> </body>
+</body>
 </html>
