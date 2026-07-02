@@ -111,7 +111,7 @@ async function fetchReservations() {
     }
 
     try {
-        reservationsBody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-500">読み込み中... (Loading)</td></tr>';
+        reservationsBody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-500">読み込み中...</td></tr>';
         
         // Fetch reservations and join with the bands table to get the band name
         if (!supabaseClient) {
