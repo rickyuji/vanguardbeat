@@ -7,7 +7,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -20,6 +20,7 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         display: ['Orbitron', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     }
                 }
             }
@@ -29,50 +30,78 @@
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
 </head>
-<body class="bg-gradient-to-br from-[#0a0a0a] to-[#121212] text-[#f5f5f5] font-sans min-h-[100svh] p-4 md:p-8 selection:bg-[#FFD60A] selection:text-black">
-    <div id="app-root" class="mx-auto hidden max-w-5xl space-y-8">
-        <header class="relative py-6 text-center">
-            <h1 class="text-4xl font-display font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FFD60A] to-yellow-600 drop-shadow-neon md:text-5xl">Borscht Beat</h1>
-            <p class="mt-2 text-xs uppercase tracking-[0.3em] text-[#A1A1AA]">Tonight We honor the hero</p>
-            <div class="absolute bottom-0 left-1/2 h-[1px] w-24 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFD60A] to-transparent"></div>
+<body class="relative bg-[#050505] text-[#F5F5F0] font-sans min-h-[100svh] p-4 md:p-8 selection:bg-[#FFD60A] selection:text-black">
+
+    <!-- Ambient scan/grid texture -->
+    <div class="scan-layer" aria-hidden="true"></div>
+
+    <div id="app-root" class="relative z-10 mx-auto hidden max-w-5xl space-y-10">
+
+        <!-- Header -->
+        <header class="relative pt-4 pb-2 text-center">
+            <p class="mb-3 font-mono text-[11px] uppercase tracking-[0.5em] text-[#8a7409]">// Borscht Presents</p>
+            <h1 class="font-display text-4xl font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FFD60A] via-[#ffe45c] to-[#c9a300] drop-shadow-neon md:text-5xl">Borscht Beat</h1>
+            <p class="mt-3 font-mono text-xs uppercase tracking-[0.3em] text-[#84848c]">Tonight We honor the hero</p>
+
+            <div class="mt-6 flex items-center justify-center gap-1.5" aria-hidden="true">
+                <span class="eq-bar" style="--d:0s"></span>
+                <span class="eq-bar" style="--d:0.15s"></span>
+                <span class="eq-bar" style="--d:0.3s"></span>
+                <span class="eq-bar" style="--d:0.45s"></span>
+                <span class="eq-bar" style="--d:0.3s"></span>
+            </div>
         </header>
 
-        <div class="flex min-h-[54px] flex-col gap-3 rounded-lg border border-gray-800 bg-[#161616] px-4 py-3 shadow-md sm:flex-row sm:items-center sm:justify-between sm:px-6">
-            <div id="login-status" class="z-10 text-center text-2xl font-medium tracking-wide text-[#FFD60A] sm:text-left"></div>
-            <div id="cashback-display" class="hidden mx-auto flex w-fit items-center justify-center rounded-md border border-[#22c55e]/20 bg-black/30 px-3 py-1.5 text-center text-lg font-semibold text-[#22c55e] drop-shadow-[0_0_6px_rgba(34,197,94,0.65)] sm:mx-auto sm:px-3 sm:py-2">
-                キャッシュバック: <span id="cashback-amount" class="ml-1">¥0</span>
+        <!-- Status bar -->
+        <div class="frame relative flex min-h-[54px] flex-col gap-3 rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div id="login-status" class="z-10 text-center font-display text-xl font-bold uppercase tracking-widest text-[#FFD60A] sm:text-left"></div>
+            <div id="cashback-display" class="hidden mx-auto flex w-fit items-center justify-center gap-1 rounded-md border border-[#22c55e]/25 bg-black/30 px-3 py-1.5 text-center font-mono text-base font-semibold text-[#22c55e] drop-shadow-[0_0_6px_rgba(34,197,94,0.55)] sm:mx-auto sm:px-4 sm:py-2">
+                <span class="text-[10px] uppercase tracking-[0.2em] text-[#22c55e]/70">キャッシュバック</span>
+                <span id="cashback-amount" class="ml-1">¥0</span>
             </div>
-            <button id="logout-btn" class="z-10 hidden text-sm font-bold uppercase tracking-widest text-gray-500 transition-colors hover:text-red-500">Logout</button>
+            <button id="logout-btn" class="z-10 hidden font-mono text-xs font-bold uppercase tracking-widest text-[#84848c] transition-colors hover:text-red-500">Logout</button>
         </div>
 
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            <div class="group relative h-fit rounded-xl border border-gray-800 bg-[#161616] p-5 shadow-2xl sm:p-6 lg:col-span-1">
-                <div class="pointer-events-none absolute inset-0 rounded-xl border border-[#FFD60A]/0 transition-colors group-hover:border-[#FFD60A]/20"></div>
-                <h2 class="mb-6 border-b border-gray-800 pb-3 text-lg font-display font-bold tracking-wide text-white">取り置き追加</h2>
+
+            <!-- Add reservation -->
+            <section class="frame relative h-fit rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 p-5 sm:p-7 lg:col-span-1">
+                <div class="mb-6 flex items-center justify-between border-b border-[#FFD60A]/15 pb-4">
+                    <h2 class="font-display text-lg font-bold uppercase tracking-wider text-white">取り置き追加</h2>
+                    <span class="pulse-dot"></span>
+                </div>
 
                 <form id="reservation-form" class="space-y-5">
                     <div>
-                        <label for="guest-name" class="mb-1 block text-xs font-bold uppercase tracking-widest text-[#A1A1AA]">取り置きのお名前</label>
-                        <input type="text" id="guest-name" required placeholder="例）テン　モン" pattern="^[ァ-ヶー]+　[ァ-ヶー]+$" title="カタカナで、全角スペースを1つ入れて入力してください" class="w-full rounded-md border border-gray-800 bg-[#0a0a0a] p-3 text-[16px] text-white transition-all focus:border-[#FFD60A] focus:outline-none focus:ring-1 focus:ring-[#FFD60A]">
+                        <label for="guest-name" class="mb-2 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
+                            <span class="text-[#FFD60A]">01</span> 取り置きのお名前
+                        </label>
+                        <input type="text" id="guest-name" required placeholder="例）テン　モン" pattern="^[ァ-ヶー]+　[ァ-ヶー]+$" title="カタカナで、全角スペースを1つ入れて入力してください" class="w-full rounded-sm border border-[#26261f] bg-[#050505] px-4 py-3 text-[16px] text-white shadow-inner outline-none transition-all placeholder:text-[#4a4a4f] focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A]/60">
                     </div>
 
                     <div>
-                        <label for="ticket-count" class="mb-1 block text-xs font-bold uppercase tracking-widest text-[#A1A1AA]">枚数</label>
-                        <input type="number" id="ticket-count" required min="1" value="1" class="w-full rounded-md border border-gray-800 bg-[#0a0a0a] p-3 text-[16px] text-white transition-all focus:border-[#FFD60A] focus:outline-none focus:ring-1 focus:ring-[#FFD60A]">
+                        <label for="ticket-count" class="mb-2 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
+                            <span class="text-[#FFD60A]">02</span> 枚数
+                        </label>
+                        <input type="number" id="ticket-count" required min="1" value="1" class="w-full rounded-sm border border-[#26261f] bg-[#050505] px-4 py-3 text-[16px] text-white shadow-inner outline-none transition-all placeholder:text-[#4a4a4f] focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A]/60">
                     </div>
 
-                    <button type="submit" id="submit-btn" class="mt-4 w-full rounded-md bg-[#FFD60A] px-4 py-3 font-black uppercase tracking-widest text-black transition-all duration-300 hover:bg-yellow-400 hover:shadow-[0_0_20px_rgba(255,214,10,0.3)]">追加</button>
+                    <button type="submit" id="submit-btn" class="mt-4 w-full rounded-sm bg-[#FFD60A] px-4 py-3.5 font-display text-sm font-black uppercase tracking-[0.25em] text-black transition-all duration-300 hover:shadow-[0_0_25px_rgba(255,214,10,0.5)]">追加</button>
 
-                    <div id="status-message" class="mt-4 hidden rounded border p-3 text-center text-sm font-bold tracking-wide"></div>
+                    <div id="status-message" class="mt-4 hidden rounded-sm border p-3 text-center font-mono text-sm font-bold tracking-wide"></div>
                 </form>
-            </div>
+            </section>
 
-            <div class="flex flex-col overflow-hidden rounded-xl border border-gray-800 bg-[#161616] shadow-2xl lg:col-span-2">
-                <div class="flex flex-col gap-3 border-b border-gray-800 bg-[#121212]/90 p-4 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:p-6">
-                    <h2 class="text-lg font-display font-bold tracking-wide text-white sm:text-2xl">取り置きリスト</h2>
+            <!-- Reservations list -->
+            <section class="frame relative flex flex-col overflow-hidden rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 lg:col-span-2">
+                <div class="flex flex-col gap-3 border-b border-[#FFD60A]/15 bg-black/40 p-4 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:p-6">
+                    <div class="flex items-center gap-3">
+                        <h2 class="font-display text-lg font-bold uppercase tracking-wider text-white sm:text-xl">取り置きリスト</h2>
+                        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#8a7409]">Roster</span>
+                    </div>
                     <div class="flex items-center gap-2 sm:gap-3">
-                        <button id="export-btn" class="hidden min-h-[40px] inline-flex items-center gap-2 rounded-md border border-[#FFD60A]/40 bg-[#FFD60A]/10 px-3 py-1.5 text-xs font-black uppercase tracking-widest text-[#FFD60A] transition-all hover:bg-[#FFD60A] hover:text-black hover:shadow-[0_0_18px_rgba(255,214,10,0.35)]">エクセル</button>
-                        <button id="refresh-btn" aria-label="取り置き一覧を更新" class="flex min-h-[40px] min-w-[40px] items-center justify-center rounded-md border border-gray-800 bg-[#1a1a1a] text-[#A1A1AA] transition-all hover:border-[#FFD60A]/40 hover:bg-[#FFD60A]/10 hover:text-[#FFD60A] hover:shadow-[0_0_10px_rgba(255,214,10,0.2)]">
+                        <button id="export-btn" class="hidden min-h-[40px] inline-flex items-center gap-2 rounded-sm border border-[#FFD60A]/40 bg-[#FFD60A]/10 px-3 py-1.5 font-mono text-xs font-black uppercase tracking-widest text-[#FFD60A] transition-all hover:bg-[#FFD60A] hover:text-black hover:shadow-[0_0_18px_rgba(255,214,10,0.35)]">エクセル</button>
+                        <button id="refresh-btn" aria-label="取り置き一覧を更新" class="flex min-h-[40px] min-w-[40px] items-center justify-center rounded-sm border border-[#26261f] bg-[#050505] text-[#84848c] transition-all hover:border-[#FFD60A]/40 hover:bg-[#FFD60A]/10 hover:text-[#FFD60A] hover:shadow-[0_0_10px_rgba(255,214,10,0.2)]">
                             <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
                                 <path d="M3 3v5h5"/>
@@ -86,7 +115,7 @@
                 <div class="custom-scrollbar flex-1 overflow-x-auto p-2">
                     <table class="min-w-full border-collapse text-left">
                         <thead>
-                            <tr class="border-b border-gray-800/50 text-xs uppercase tracking-widest text-[#A1A1AA]">
+                            <tr class="border-b border-[#FFD60A]/10 font-mono text-[10px] uppercase tracking-[0.25em] text-[#84848c]">
                                 <th class="p-4 font-semibold">お名前</th>
                                 <th class="p-4 font-semibold text-center">枚数</th>
                                 <th class="p-4 font-semibold text-right">アクセス</th>
@@ -94,20 +123,20 @@
                         </thead>
                         <tbody id="reservations-body">
                             <tr>
-                                <td colspan="3" class="p-8 text-center font-medium tracking-wide text-gray-600">データがありません</td>
+                                <td colspan="3" class="p-8 text-center font-mono text-sm font-medium tracking-wide text-[#4a4a4f]">データがありません</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </section>
         </div>
 
         <footer class="relative mt-8 py-8 text-center">
-            <div class="absolute top-0 left-1/2 h-[1px] w-32 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFD60A] to-transparent"></div>
-            <a href="https://maps.app.goo.gl/NVhFEDvC7bw6SrYU8" target="_blank" rel="noopener noreferrer" class="inline-block">
-                <h2 class="mt-4 text-xl font-display font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FFD60A] to-yellow-600 drop-shadow-neon md:text-3xl">8/31 @Spade Box</h2>
+            <div class="absolute top-0 left-1/2 h-px w-32 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFD60A]/40 to-transparent"></div>
+            <a href="https://maps.app.goo.gl/NVhFEDvC7bw6SrYU8" target="_blank" rel="noopener noreferrer" class="inline-block transition-opacity hover:opacity-80">
+                <h2 class="mt-6 font-display text-lg font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FFD60A] via-[#ffe45c] to-[#c9a300] drop-shadow-neon md:text-2xl">8/31 @Spade Box</h2>
             </a>
-            <p class="mt-2 text-xs uppercase tracking-[0.3em] text-[#A1A1AA]">See you in my dream</p>
+            <p class="mt-2 font-mono text-[11px] uppercase tracking-[0.3em] text-[#84848c]">See you in my dream</p>
         </footer>
     </div>
 </body>
