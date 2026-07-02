@@ -41,7 +41,6 @@
             <div class="p-6 sm:p-9">
                 <div class="mb-8 flex items-center justify-between border-b border-[#FFD60A]/15 pb-4">
                     <div>
-                        <p class="mb-1 font-mono text-[11px] uppercase tracking-[0.35em] text-[#8a7409]">System / Auth</p>
                         <h2 class="font-display text-2xl font-black uppercase tracking-wider text-[#FFD60A] drop-shadow-neon">Access Panel</h2>
                     </div>
                     <span class="pulse-dot"></span>
@@ -50,14 +49,14 @@
                 <div class="space-y-5">
                     <div>
                         <label for="login-band" class="mb-2 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
-                            <span class="text-[#FFD60A]">01</span> Band Name
+                            Band Name
                         </label>
                         <input id="login-band" autocomplete="username" class="w-full rounded-sm border border-[#26261f] bg-[#050505] px-4 py-3 text-[16px] text-white shadow-inner outline-none transition-all placeholder:text-[#4a4a4f] focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A]/60" placeholder="バンド名">
                     </div>
 
                     <div>
                         <label for="login-password" class="mb-2 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
-                            <span class="text-[#FFD60A]">02</span> Password
+                            Password
                         </label>
                         <input id="login-password" type="password" autocomplete="current-password" class="w-full rounded-sm border border-[#26261f] bg-[#050505] px-4 py-3 text-[16px] text-white shadow-inner outline-none transition-all placeholder:text-[#4a4a4f] focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A]/60" placeholder="••••••••">
                     </div>
@@ -68,7 +67,7 @@
 
                     <div id="login-message" class="text-center font-mono text-sm font-medium text-red-500" aria-live="polite"></div>
 
-                    <button id="login-close" class="w-full rounded-sm border border-[#26261f] px-4 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-[#84848c] transition-colors hover:border-[#3a3a3a] hover:text-white">
+                    <button id="login-close" class="w-full rounded-sm border border-[#26261f] px-4 py-3 font-mono text-[12px] font-bold uppercase tracking-[0.25em] text-[#84848c] transition-colors hover:border-[#3a3a3a] hover:text-white">
                         Close
                     </button>
                 </div>
@@ -81,7 +80,7 @@
 
         <!-- Header -->
         <header class="relative pt-8 pb-2 text-center">
-            <p class="mb-3 font-mono text-[11px] uppercase tracking-[0.5em] text-[#8a7409]">// Borscht Presents</p>
+            <p class="mb-3 font-mono text-[11px] uppercase tracking-[0.5em] text-[#8a7409]">Borscht Presents</p>
             <h1 class="font-display text-5xl font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#FFD60A] via-[#ffe45c] to-[#c9a300] drop-shadow-neon md:text-7xl">
                 Borscht Beat
             </h1>
@@ -97,51 +96,56 @@
             </div>
         </header>
 
-        <!-- Event data panel -->
-        <section class="frame relative mx-auto w-full max-w-lg rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 px-6 py-8 sm:px-10">
+        <!-- Event data + Lineup: stacked on mobile, side-by-side on desktop -->
+        <div class="grid grid-cols-1 items-start justify-items-center gap-8 md:grid-cols-2 md:gap-6">
 
-            <h2 class="font-display text-2xl font-bold uppercase tracking-wider text-white sm:text-3xl">
-                2026.08.31
-            </h2>
-            <p class="mt-1 font-mono text-sm uppercase tracking-[0.2em] text-[#FFD60A]">@Spade Box</p>
+            <!-- Event data panel -->
+            <section class="frame relative w-full max-w-lg rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 px-6 py-8 sm:px-10">
 
-            <div class="my-7 h-px w-full bg-gradient-to-r from-transparent via-[#FFD60A]/30 to-transparent"></div>
+                <h2 class="font-display text-2xl font-bold uppercase tracking-wider text-white sm:text-3xl">
+                    2026.08.31
+                </h2>
+                <p class="mt-1 font-mono text-sm uppercase tracking-[0.2em] text-[#FFD60A]">@Spade Box</p>
 
-            <dl class="grid grid-cols-2 gap-y-5 text-center font-mono">
-                <div class="border-r border-[#FFD60A]/10">
-                    <dt class="text-[10px] uppercase tracking-[0.3em] text-[#84848c]">Open</dt>
-                    <dd class="mt-1 text-xl font-semibold text-[#f5f5f0]">10:30</dd>
+                <div class="my-7 h-px w-full bg-gradient-to-r from-transparent via-[#FFD60A]/30 to-transparent"></div>
+
+                <dl class="grid grid-cols-2 gap-y-5 text-center font-mono">
+                    <div class="border-r border-[#FFD60A]/10">
+                        <dt class="text-[12px] uppercase tracking-[0.3em] text-[#84848c]">Open</dt>
+                        <dd class="mt-1 text-xl font-semibold text-[#f5f5f0]">10:30</dd>
+                    </div>
+
+                    <div class="border-r border-[#FFD60A]/10">
+                        <dt class="text-[12px] uppercase tracking-[0.3em] text-[#84848c]">Adv</dt>
+                        <dd class="mt-1 text-xl font-semibold text-[#FFD60A]">¥1,400</dd>
+                    </div>
+                    <div>
+                        <dt class="text-[12px] uppercase tracking-[0.3em] text-[#84848c]">Start</dt>
+                        <dd class="mt-1 text-xl font-semibold text-[#f5f5f0]">11:00</dd>
+                    </div>
+                    <div>
+                        <dt class="text-[12px] uppercase tracking-[0.3em] text-[#84848c]">Door</dt>
+                        <dd class="mt-1 text-xl font-semibold text-[#FFD60A]">¥1,900</dd>
+                    </div>
+                </dl>
+            </section>
+
+            <!-- Lineup panel -->
+            <section class="frame relative w-full max-w-sm rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 px-6 py-8 sm:px-8">
+                <div class="mb-5 flex items-center justify-between border-b border-[#FFD60A]/15 pb-4">
+                    <h2 class="font-display text-lg font-bold uppercase tracking-[0.2em] text-white">Lineup</h2>
                 </div>
-                <div>
-                    <dt class="text-[10px] uppercase tracking-[0.3em] text-[#84848c]">Start</dt>
-                    <dd class="mt-1 text-xl font-semibold text-[#f5f5f0]">11:00</dd>
-                </div>
-                <div class="border-r border-[#FFD60A]/10">
-                    <dt class="text-[10px] uppercase tracking-[0.3em] text-[#84848c]">Adv</dt>
-                    <dd class="mt-1 text-xl font-semibold text-[#FFD60A]">¥1,400</dd>
-                </div>
-                <div>
-                    <dt class="text-[10px] uppercase tracking-[0.3em] text-[#84848c]">Door</dt>
-                    <dd class="mt-1 text-xl font-semibold text-[#FFD60A]">¥1,900</dd>
-                </div>
-            </dl>
-        </section>
 
-        <!-- Lineup panel -->
-        <section class="frame relative mx-auto w-full max-w-sm rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 px-6 py-8 sm:px-8">
-            <div class="mb-5 flex items-center justify-between border-b border-[#FFD60A]/15 pb-4">
-                <h2 class="font-display text-lg font-bold uppercase tracking-[0.2em] text-white">Lineup</h2>
-            </div>
-
-            <ul class="custom-scrollbar max-h-[420px] space-y-1 overflow-y-auto">
-                <li class="lineup-row"><span class="lineup-index">01</span><span class="lineup-name font-semibold text-[#FFD60A]">BORSCHT</span></li>
-                <li class="lineup-row"><span class="lineup-index">02</span><span class="lineup-name">Lily of the Valley</span></li>
-                <li class="lineup-row"><span class="lineup-index">03</span><span class="lineup-name">La Plata Dolphin</span></li>
-                <li class="lineup-row"><span class="lineup-index">04</span><span class="lineup-name">ØROKAMONO</span></li>
-                <li class="lineup-row"><span class="lineup-index">05</span><span class="lineup-name">WALABE</span></li>
-                <li class="lineup-row lineup-row--muted"><span class="lineup-index"></span><span class="lineup-name">and more...</span></li>
-            </ul>
-        </section>
+                <ul class="custom-scrollbar max-h-[420px] space-y-1 overflow-y-auto">
+                    <li class="lineup-row"><span class="lineup-index">01</span><span class="lineup-name font-semibold text-[#FFD60A]">BORSCHT</span></li>
+                    <li class="lineup-row"><span class="lineup-index">02</span><span class="lineup-name">Lily of the Valley</span></li>
+                    <li class="lineup-row"><span class="lineup-index">03</span><span class="lineup-name">La Plata Dolphin</span></li>
+                    <li class="lineup-row"><span class="lineup-index">04</span><span class="lineup-name">ØROKAMONO</span></li>
+                    <li class="lineup-row"><span class="lineup-index">05</span><span class="lineup-name">WALABE</span></li>
+                    <li class="lineup-row lineup-row--muted"><span class="lineup-index"></span><span class="lineup-name">and more...</span></li>
+                </ul>
+            </section>
+        </div>
 
         <div class="mx-auto h-px w-48 bg-gradient-to-r from-transparent via-[#FFD60A]/40 to-transparent"></div>
 
