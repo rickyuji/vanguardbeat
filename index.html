@@ -98,6 +98,20 @@
 
         <!-- Event data + Lineup: stacked on mobile, side-by-side on desktop -->
         <div class="grid grid-cols-1 items-start justify-items-center gap-8 md:grid-cols-2 md:gap-6">
+            <section class="frame relative w-full max-w-md md:max-w-sm rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 px-6 py-8 sm:px-8">
+                <div class="mb-5 flex items-center justify-between border-b border-[#FFD60A]/15 pb-4">
+                    <h2 class="font-display text-lg font-bold uppercase tracking-[0.2em] text-white">Lineup</h2>
+                </div>
+
+                <ul class="custom-scrollbar max-h-[420px] space-y-1 overflow-y-auto">
+                    <li class="lineup-row"><span class="lineup-name text-xl font-semibold text-[#FFD60A]">BORSCHT</span></li>
+                    <li class="lineup-row"><span class="lineup-name">Lily of the Valley</span></li>
+                    <li class="lineup-row"><span class="lineup-name">La Plata Dolphin</span></li>
+                    <li class="lineup-row"><span class="lineup-name">ØROKAMONO</span></li>
+                    <li class="lineup-row"><span class="lineup-name">WALABE</span></li>
+                    <li class="lineup-row lineup-row--muted"><span class="lineup-name">and more...</span></li>
+                </ul>
+            </section>
 
             <section class="frame relative w-full max-w-md md:max-w-lg rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 px-6 py-8 sm:px-10">
 
@@ -129,20 +143,7 @@
                 </dl>
             </section>
 
-            <section class="frame relative w-full max-w-md md:max-w-sm rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 px-6 py-8 sm:px-8">
-                <div class="mb-5 flex items-center justify-between border-b border-[#FFD60A]/15 pb-4">
-                    <h2 class="font-display text-lg font-bold uppercase tracking-[0.2em] text-white">Lineup</h2>
-                </div>
-
-                <ul class="custom-scrollbar max-h-[420px] space-y-1 overflow-y-auto">
-                    <li class="lineup-row"><span class="lineup-index">01</span><span class="lineup-name font-semibold text-[#FFD60A]">BORSCHT</span></li>
-                    <li class="lineup-row"><span class="lineup-index">02</span><span class="lineup-name">Lily of the Valley</span></li>
-                    <li class="lineup-row"><span class="lineup-index">03</span><span class="lineup-name">La Plata Dolphin</span></li>
-                    <li class="lineup-row"><span class="lineup-index">04</span><span class="lineup-name">ØROKAMONO</span></li>
-                    <li class="lineup-row"><span class="lineup-index">05</span><span class="lineup-name">WALABE</span></li>
-                    <li class="lineup-row lineup-row--muted"><span class="lineup-index"></span><span class="lineup-name">and more...</span></li>
-                </ul>
-            </section>
+            
         </div>
         
         <div class="pt-4 pb-6">
