@@ -149,6 +149,17 @@ body {
     border-color: rgba(239, 68, 68, 0.3) !important;
     color: #f87171 !important;
 }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 
 /* ---------- Dark mode custom scrollbar ---------- */
 .custom-scrollbar::-webkit-scrollbar {
