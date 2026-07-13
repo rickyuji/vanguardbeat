@@ -6,7 +6,7 @@ const BAND_PASSWORDS = {
     '花緑青': 'hanaroku2024',
     'ØROKAMONO': 'orokamono2024',
     'WALABE': 'walabe2024',
-    'La Plata Dolphins': 'laplata2024',
+    'La Plata Dolphin': 'laplata2024',
     'Lily of the valley': 'lilyvalley2024',
     'applause': 'applause2024'
 };
