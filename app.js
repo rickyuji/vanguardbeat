@@ -32,6 +32,19 @@ const submitBtn = document.getElementById('submit-btn');
 const refreshBtn = document.getElementById('refresh-btn');
 const exportBtn = document.getElementById('export-btn');
 
+// Only this band name is allowed to see/use the export-to-Excel feature.
+const EXPORT_ALLOWED_BAND = 'Borscht';
+
+// Show/hide the export button explicitly, without relying on a Tailwind
+// responsive utility (e.g. `sm:inline-flex`) baked into the HTML — those
+// rules win over a JS-toggled `hidden` class at their breakpoint and made
+// the button appear for every band. We toggle both `hidden` and the
+// display class here so visibility is fully controlled from JS.
+function setExportButtonVisibility(isVisible) {
+    exportBtn.classList.toggle('hidden', !isVisible);
+    exportBtn.classList.toggle('inline-flex', isVisible);
+}
+
 function loadCurrentBandFromSession() {
     try {
         const storedBand = sessionStorage.getItem(SESSION_KEY);
@@ -288,8 +301,8 @@ async function exportReservationsToExcel() {
             throw new Error('Supabase client is not available.');
         }
 
-        if (!currentBand || currentBand.band_name !== 'Borscht') {
-            throw new Error('Export is only available for Borscht.');
+        if (!currentBand || currentBand.band_name !== EXPORT_ALLOWED_BAND) {
+            throw new Error(`Export is only available for ${EXPORT_ALLOWED_BAND}.`);
         }
 
         if (typeof window.XLSX === 'undefined') {
@@ -383,7 +396,7 @@ window.addEventListener('DOMContentLoaded', () => {
         appRoot.classList.remove('hidden');
         loginStatus.textContent = `${currentBand.band_name}`;
         cashbackDisplay.classList.remove('hidden');
-        exportBtn.classList.toggle('hidden', currentBand.band_name !== 'Borscht');
+        setExportButtonVisibility(currentBand.band_name === EXPORT_ALLOWED_BAND);
         logoutBtn.classList.remove('hidden');
         fetchReservations();
     });
@@ -394,7 +407,7 @@ window.addEventListener('DOMContentLoaded', () => {
         cashbackAmount.textContent = '¥0';
         cashbackDisplay.classList.add('hidden');
         logoutBtn.classList.add('hidden');
-        exportBtn.classList.add('hidden');
+        setExportButtonVisibility(false);
         guestNameInput.value = '';
         ticketCountInput.value = '1';
         reservationsBody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-400">ログインしてください</td></tr>';
