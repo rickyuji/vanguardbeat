@@ -12,7 +12,7 @@ const BAND_PASSWORDS = {
     'BANGER BUDGE': 'banger2024',
     'Lily of the valley': 'lilyvalley2024',
     'The Hidden Cat': 'hidden789',
-    'OROKAMONO': 'orokamono2024'
+    'OROKAMONO': 'orokamono2024',
 };
 
 const SESSION_KEY = 'borscht-current-band';
