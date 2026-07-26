@@ -4,15 +4,15 @@ const BAND_PASSWORDS = {
     'Noah': 'noah456',
     'applause': 'applause123',
     'The Wake': 'wake789',
-    'Libido': 'libido456',
-    'WALABE': 'walabe2024',
-    'やきそばvision': 'yakisoba2024',
-    '花緑青': 'hanaroku2024',
-    'La Plata Dolphin': 'laplata2024',
-    'BANGER BUDGE': 'banger2024',
-    'Lily of the valley': 'lilyvalley2024',
+    'Libido': 'libido69',
+    'WALABE': 'walabemk',
+    'やきそばvision': 'yakisobaa',
+    '花緑青': 'hanaroku5',
+    'La Plata Dolphin': 'laplatasogo',
+    'BANGER BUDGE': 'banger60',
+    'Lily of the valley': 'lilyvalley',
     'The Hidden Cat': 'hidden789',
-    'OROKAMONO': 'orokamono2024',
+    'OROKAMONO': 'orokakousuke',
 };
 
 const SESSION_KEY = 'borscht-current-band';
