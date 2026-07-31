@@ -30,20 +30,13 @@ const statusMessage = document.getElementById('status-message');
 const reservationsBody = document.getElementById('reservations-body');
 const submitBtn = document.getElementById('submit-btn');
 const refreshBtn = document.getElementById('refresh-btn');
-const exportBtn = document.getElementById('export-btn');
 
-// Only this band name is allowed to see/use the export-to-Excel feature.
-const EXPORT_ALLOWED_BAND = 'Borscht';
-
-// Show/hide the export button explicitly, without relying on a Tailwind
-// responsive utility (e.g. `sm:inline-flex`) baked into the HTML — those
-// rules win over a JS-toggled `hidden` class at their breakpoint and made
-// the button appear for every band. We toggle both `hidden` and the
-// display class here so visibility is fully controlled from JS.
-function setExportButtonVisibility(isVisible) {
-    exportBtn.classList.toggle('hidden', !isVisible);
-    exportBtn.classList.toggle('inline-flex', isVisible);
-}
+// 打ち上げ参加人数 UI Elements
+const partyMinusBtn = document.getElementById('party-minus-btn');
+const partyPlusBtn = document.getElementById('party-plus-btn');
+const partyCountDisplay = document.getElementById('party-count-display');
+const partySubmitBtn = document.getElementById('party-submit-btn');
+const partyStatusMessage = document.getElementById('party-status-message');
 
 function loadCurrentBandFromSession() {
     try {
@@ -88,6 +81,22 @@ function showMessage(text, isError = false) {
     // Hide after 3 seconds
     setTimeout(() => {
         statusMessage.classList.add('hidden');
+    }, 3000);
+}
+
+// Helper to show status messages smoothly (generic version, target element passed in)
+function showMessageIn(targetEl, text, isError = false) {
+    targetEl.textContent = text;
+    targetEl.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+    if (isError) {
+        targetEl.classList.add('bg-red-100', 'text-red-800');
+    } else {
+        targetEl.classList.add('bg-green-100', 'text-green-800');
+    }
+
+    setTimeout(() => {
+        targetEl.classList.add('hidden');
     }, 3000);
 }
 
@@ -271,111 +280,99 @@ function escapeHTML(str) {
     return div.innerHTML;
 }
 
-function sanitizeSheetName(name) {
-    const baseName = String(name || 'Banda')
-        .replace(/[\\/?*\[\]:]/g, '_')
-        .replace(/^'+|'+$/g, '')
-        .trim();
+// ==========================================
+// 5. PARTY ATTENDANCE (打ち上げ参加人数)
+// ==========================================
+let partyCount = 0; // ローカルのカウンター値（未確定）
 
-    return (baseName || 'Banda').slice(0, 31);
+function updatePartyCountDisplay() {
+    partyCountDisplay.textContent = partyCount;
+    partyMinusBtn.disabled = partyCount <= 0;
+    partyMinusBtn.classList.toggle('opacity-40', partyCount <= 0);
+    partyMinusBtn.classList.toggle('cursor-not-allowed', partyCount <= 0);
 }
 
-function createUniqueSheetName(name, usedNames) {
-    const baseName = sanitizeSheetName(name);
-    let candidate = baseName;
-    let suffix = 1;
+function resetPartyCounter() {
+    partyCount = 0;
+    updatePartyCountDisplay();
+}
 
-    while (usedNames.has(candidate)) {
-        const suffixText = `_${suffix}`;
-        candidate = `${baseName.slice(0, 31 - suffixText.length)}${suffixText}`;
-        suffix += 1;
+// 既存の登録済み人数をサーバーから取得して表示に反映する
+async function fetchPartyAttendance() {
+    if (!currentBand || !supabaseClient) {
+        resetPartyCounter();
+        return;
     }
 
-    usedNames.add(candidate);
-    return candidate;
-}
-
-async function exportReservationsToExcel() {
     try {
-        if (!supabaseClient) {
-            throw new Error('Supabase client is not available.');
-        }
-
-        if (!currentBand || currentBand.band_name !== EXPORT_ALLOWED_BAND) {
-            throw new Error(`Export is only available for ${EXPORT_ALLOWED_BAND}.`);
-        }
-
-        if (typeof window.XLSX === 'undefined') {
-            throw new Error('SheetJS is not loaded.');
-        }
-
-        exportBtn.disabled = true;
-        exportBtn.textContent = 'ダウンロード中';
-
         const { data, error } = await supabaseClient
-            .from('reservations')
-            .select(`
-                id,
-                guest_name,
-                ticket_count,
-                band_id,
-                bands ( band_name )
-            `)
-            .order('created_at', { ascending: false });
+            .from('party_attendance')
+            .select('attendee_count')
+            .eq('band_id', currentBand.id)
+            .maybeSingle();
 
         if (error) throw error;
 
-        const groupedReservations = new Map();
-
-        (data || []).forEach((reservation) => {
-            const bandName = reservation.bands?.band_name || 'バンドなし';
-            if (!groupedReservations.has(bandName)) {
-                groupedReservations.set(bandName, []);
-            }
-            groupedReservations.get(bandName).push(reservation);
-        });
-
-        if (groupedReservations.size === 0) {
-            throw new Error('データがありません');
-        }
-
-        const workbook = window.XLSX.utils.book_new();
-        const usedSheetNames = new Set();
-
-        for (const [bandName, reservations] of groupedReservations.entries()) {
-            const totalTickets = reservations.reduce((sum, reservation) => sum + Number(reservation.ticket_count || 0), 0);
-            const rows = [[
-                '名前',
-                '枚数',
-                '枚数合計'
-            ]];
-
-            reservations.forEach((reservation, index) => {
-                rows.push([
-                    reservation.guest_name || '',
-                    reservation.ticket_count ?? '',
-                    index === 0 ? totalTickets : ''
-                ]);
-            });
-
-            const worksheet = window.XLSX.utils.aoa_to_sheet(rows);
-            const sheetName = createUniqueSheetName(bandName, usedSheetNames);
-            window.XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-        }
-
-        window.XLSX.writeFile(workbook, 'Vanguard_Borscht_Beat.xlsx');
+        partyCount = data?.attendee_count ?? 0;
+        updatePartyCountDisplay();
     } catch (err) {
-        console.error('Error exporting reservations:', err);
-        showMessage('エクスポートに失敗しました', true);
-    } finally {
-        exportBtn.disabled = false;
-        exportBtn.textContent = 'エクセル';
+        console.error('Error fetching party attendance:', err);
+        resetPartyCounter();
     }
 }
 
+// 確定ボタン：現在のバンドの人数を upsert する
+async function submitPartyAttendance() {
+    if (!currentBand) {
+        showMessageIn(partyStatusMessage, 'ログインしてください', true);
+        return;
+    }
+
+    if (!supabaseClient) {
+        showMessageIn(partyStatusMessage, 'サーバー接続がありません', true);
+        console.error('Supabase client is not available.');
+        return;
+    }
+
+    partySubmitBtn.disabled = true;
+    partySubmitBtn.textContent = '送信中...';
+
+    try {
+        const { error } = await supabaseClient
+            .from('party_attendance')
+            .upsert(
+                { band_id: currentBand.id, attendee_count: partyCount },
+                { onConflict: 'band_id' }
+            );
+
+        if (error) throw error;
+
+        showMessageIn(partyStatusMessage, '参加人数を確定しました！');
+    } catch (err) {
+        console.error('Error submitting party attendance:', err);
+        showMessageIn(partyStatusMessage, 'エラーが発生しました', true);
+    } finally {
+        partySubmitBtn.disabled = false;
+        partySubmitBtn.textContent = '確定';
+    }
+}
+
+partyMinusBtn.addEventListener('click', () => {
+    if (partyCount > 0) {
+        partyCount -= 1;
+        updatePartyCountDisplay();
+    }
+});
+
+partyPlusBtn.addEventListener('click', () => {
+    partyCount += 1;
+    updatePartyCountDisplay();
+});
+
+partySubmitBtn.addEventListener('click', submitPartyAttendance);
+
 // Event Listeners for initialization and manual refresh
 refreshBtn.addEventListener('click', fetchReservations);
-exportBtn.addEventListener('click', exportReservationsToExcel);
 
 window.addEventListener('DOMContentLoaded', () => {
     const storedBand = requireBandSession();
@@ -396,9 +393,9 @@ window.addEventListener('DOMContentLoaded', () => {
         appRoot.classList.remove('hidden');
         loginStatus.textContent = `${currentBand.band_name}`;
         cashbackDisplay.classList.remove('hidden');
-        setExportButtonVisibility(currentBand.band_name === EXPORT_ALLOWED_BAND);
         logoutBtn.classList.remove('hidden');
         fetchReservations();
+        fetchPartyAttendance();
     });
 
     logoutBtn.addEventListener('click', () => {
@@ -407,9 +404,9 @@ window.addEventListener('DOMContentLoaded', () => {
         cashbackAmount.textContent = '¥0';
         cashbackDisplay.classList.add('hidden');
         logoutBtn.classList.add('hidden');
-        setExportButtonVisibility(false);
         guestNameInput.value = '';
         ticketCountInput.value = '1';
+        resetPartyCounter();
         reservationsBody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-400">ログインしてください</td></tr>';
         appRoot.classList.add('hidden');
         sessionStorage.removeItem(SESSION_KEY);

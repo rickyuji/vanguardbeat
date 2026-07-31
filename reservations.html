@@ -11,7 +11,6 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -64,42 +63,13 @@
 
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
 
-            <!-- Add reservation -->
-            <section class="frame relative h-fit rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 p-5 sm:p-7 lg:col-span-1">
-                <div class="mb-6 flex items-center justify-between border-b border-[#FFD60A]/15 pb-4">
-                    <h2 class="font-display text-lg font-bold uppercase tracking-wider text-white">取り置き追加</h2>
-                    <span class="pulse-dot"></span>
-                </div>
-
-                <form id="reservation-form" class="space-y-5">
-                    <div>
-                        <label for="guest-name" class="mb-2 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
-                            取り置きのお名前
-                        </label>
-                        <input type="text" id="guest-name" required placeholder="例）テン　モン" pattern="^[ァ-ヶー]+　[ァ-ヶー]+$" title="カタカナで、全角スペースを1つ入れて入力してください" class="w-full rounded-sm border border-[#26261f] bg-[#050505] px-4 py-3 text-[16px] text-white shadow-inner outline-none transition-all placeholder:text-[#4a4a4f] focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A]/60">
-                    </div>
-
-                    <div>
-                        <label for="ticket-count" class="mb-2 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
-                            枚数
-                        </label>
-                        <input type="number" id="ticket-count" required min="1" value="1" class="w-full rounded-sm border border-[#26261f] bg-[#050505] px-4 py-3 text-[16px] text-white shadow-inner outline-none transition-all placeholder:text-[#4a4a4f] focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A]/60">
-                    </div>
-
-                    <button type="submit" id="submit-btn" class="mt-4 w-full rounded-sm bg-[#FFD60A] px-4 py-3.5 font-display text-sm font-black uppercase tracking-[0.25em] text-black transition-all duration-300 hover:shadow-[0_0_25px_rgba(255,214,10,0.5)]">追加</button>
-
-                    <div id="status-message" class="mt-4 hidden rounded-sm border p-3 text-center font-mono text-sm font-bold tracking-wide"></div>
-                </form>
-            </section>
-
-            <!-- Reservations list -->
-           <section class="frame relative flex flex-col overflow-hidden rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 lg:col-span-2">
+            <!-- 右カラム：取り置きリスト（スマホでは上に表示させるため order-1） -->
+            <section class="frame relative flex flex-col overflow-hidden rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 lg:col-span-2 order-1 lg:order-2">
                 <div class="flex items-center justify-between gap-3 border-b border-[#FFD60A]/15 bg-black/40 p-4 backdrop-blur-md sm:p-6">
                     <div class="flex items-center gap-3">
                         <h2 class="font-display text-lg font-bold uppercase tracking-wider text-white sm:text-xl">取り置きリスト</h2>
                     </div>
                     <div class="flex items-center gap-2 sm:gap-3">
-                        <button id="export-btn" class="hidden min-h-[40px] items-center gap-2 rounded-sm border border-[#FFD60A]/40 bg-[#FFD60A]/10 px-3 py-1.5 font-mono text-xs font-black uppercase tracking-widest text-[#FFD60A] transition-all hover:bg-[#FFD60A] hover:text-black hover:shadow-[0_0_18px_rgba(255,214,10,0.35)]">エクセル</button>
                         <button id="refresh-btn" aria-label="取り置き一覧を更新" class="flex min-h-[40px] min-w-[40px] items-center justify-center rounded-sm border border-[#26261f] bg-[#050505] text-[#84848c] transition-all hover:border-[#FFD60A]/40 hover:bg-[#FFD60A]/10 hover:text-[#FFD60A] hover:shadow-[0_0_10px_rgba(255,214,10,0.2)]">
                             <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
@@ -128,8 +98,78 @@
                     </table>
                 </div>
             </section>
-        </div>
 
+            <!-- 左カラム：取り置き追加 ＆ 打ち上げ人数（スマホでは下に表示させるため order-2） -->
+            <div class="flex flex-col gap-8 lg:col-span-1 order-2 lg:order-1">
+
+                <!-- 取り置き追加 -->
+                <section class="frame relative h-fit rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 p-5 sm:p-7">
+                    <div class="mb-6 flex items-center justify-between border-b border-[#FFD60A]/15 pb-4">
+                        <h2 class="font-display text-lg font-bold uppercase tracking-wider text-white">取り置き追加</h2>
+                        <span class="pulse-dot"></span>
+                    </div>
+
+                    <form id="reservation-form" class="space-y-5">
+                        <div>
+                            <label for="guest-name" class="mb-2 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
+                                取り置きのお名前
+                            </label>
+                            <input type="text" id="guest-name" required placeholder="例）テン モン" pattern="^[ァ-ヶー]+ [ァ-ヶー]+$" title="カタカナで、全角スペースを1つ入れて入力してください" class="w-full rounded-sm border border-[#26261f] bg-[#050505] px-4 py-3 text-[16px] text-white shadow-inner outline-none transition-all placeholder:text-[#4a4a4f] focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A]/60">
+                        </div>
+
+                        <div>
+                            <label for="ticket-count" class="mb-2 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
+                                枚数
+                            </label>
+                            <input type="number" id="ticket-count" required min="1" value="1" class="w-full rounded-sm border border-[#26261f] bg-[#050505] px-4 py-3 text-[16px] text-white shadow-inner outline-none transition-all placeholder:text-[#4a4a4f] focus:border-[#FFD60A] focus:ring-1 focus:ring-[#FFD60A]/60">
+                        </div>
+
+                        <button type="submit" id="submit-btn" class="mt-4 w-full rounded-sm bg-[#FFD60A] px-4 py-3.5 font-display text-sm font-black uppercase tracking-[0.25em] text-black transition-all duration-300 hover:shadow-[0_0_25px_rgba(255,214,10,0.5)]">追加</button>
+
+                        <div id="status-message" class="mt-4 hidden rounded-sm border p-3 text-center font-mono text-sm font-bold tracking-wide"></div>
+                    </form>
+                </section>
+
+                <!-- 打ち上げ参加人数セクション -->
+                <section class="frame relative h-fit rounded-md border border-[#FFD60A]/15 bg-[#0a0a0a]/70 p-5 sm:p-7">
+                    <div class="mb-6 flex items-center justify-between border-b border-[#FFD60A]/15 pb-4">
+                        <h2 class="font-display text-lg font-bold uppercase tracking-wider text-white">打ち上げ参加</h2>
+                        <span class="pulse-dot" style="animation-delay: 1s;"></span>
+                    </div>
+
+                    <div class="space-y-5">
+                        <label class="flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">
+                            参加人数
+                        </label>
+
+                        <!-- カウンターUI -->
+                        <div class="flex items-center justify-between rounded-sm border border-[#26261f] bg-[#050505] p-2">
+                            <button type="button" id="party-minus-btn" class="flex h-12 w-12 items-center justify-center rounded-sm bg-[#121212] text-xl font-bold text-[#a1a1aa] transition-colors hover:bg-[#FFD60A]/20 hover:text-[#FFD60A] active:scale-95">
+                                -
+                            </button>
+
+                            <div class="flex items-baseline gap-1 font-mono text-2xl font-bold text-white">
+                                <span id="party-count-display">0</span>
+                                <span class="text-sm text-[#84848c]">人</span>
+                            </div>
+
+                            <button type="button" id="party-plus-btn" class="flex h-12 w-12 items-center justify-center rounded-sm bg-[#121212] text-xl font-bold text-[#a1a1aa] transition-colors hover:bg-[#FFD60A]/20 hover:text-[#FFD60A] active:scale-95">
+                                +
+                            </button>
+                        </div>
+
+                        <!-- 確定ボタン -->
+                        <button type="button" id="party-submit-btn" class="mt-4 w-full rounded-sm border border-[#FFD60A] bg-transparent px-4 py-3.5 font-display text-sm font-black uppercase tracking-[0.25em] text-[#FFD60A] transition-all duration-300 hover:bg-[#FFD60A] hover:text-black hover:shadow-[0_0_20px_rgba(255,214,10,0.3)]">
+                            確定
+                        </button>
+
+                        <div id="party-status-message" class="mt-4 hidden rounded-sm border p-3 text-center font-mono text-sm font-bold tracking-wide"></div>
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
 
         <footer class="relative mt-2 pt-6 pb-4 text-center">
             <div class="absolute top-0 left-1/2 h-px w-32 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFD60A]/40 to-transparent"></div>
